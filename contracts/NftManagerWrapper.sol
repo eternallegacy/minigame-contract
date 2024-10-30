@@ -16,7 +16,7 @@ contract NftManagerWrapper is ERC1155Upgradeable, OwnableUpgradeable, IERC1155Re
 
     event SetPrice(uint256 id, address underlying, uint256 price);
     event SetNft(address oldNft, address newNft);
-    event Buy(address indexed user, uint256 id, uint256 value, bytes data, address indexed under, address indexed nft);
+    event Buy(address indexed user, uint256 id, uint256 value, bytes data, address indexed underlying, address indexed nft);
 
     function initialize() public initializer {
         __Ownable_init(msg.sender);
