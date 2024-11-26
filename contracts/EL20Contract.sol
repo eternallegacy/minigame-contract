@@ -5,8 +5,15 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {ERC20Permit} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract EL20Contract is ERC20, Ownable, ERC20Permit {
+interface IEL20Contract {
+    function mint(address to, uint256 value) external;
+
+    function burn(uint256 value) external;
+}
+
+contract EL20Contract is ERC20, Ownable, ERC20Permit, IEL20Contract {
     address public minter;
+
     constructor()
         ERC20("Eternal Legacy EXP", "EXP")
         Ownable(msg.sender)
@@ -14,6 +21,7 @@ contract EL20Contract is ERC20, Ownable, ERC20Permit {
     {}
 
     event SetMinter(address oldMinter, address newMinter);
+
     modifier onlyMinter() {
         require(msg.sender == minter, "only minter");
         _;
@@ -29,8 +37,8 @@ contract EL20Contract is ERC20, Ownable, ERC20Permit {
         _mint(to, amount);
     }
 
-    function burn(address to, uint256 amount) public {
-        _burn(to, amount);
+    function burn(uint256 amount) public {
+        _burn(msg.sender, amount);
     }
 
     function transfer(
@@ -48,8 +56,8 @@ contract EL20Contract is ERC20, Ownable, ERC20Permit {
         uint8 decimal
     ) public returns (bool) {
         uint8 _decimal = decimals();
-         
-        require(decimal <= _decimal);
+
+        require(decimal <= _decimal, "decimals too large");
 
         // 计算 amount2
         uint256 amount2 = (amount / (10 ** (_decimal - decimal))) *
