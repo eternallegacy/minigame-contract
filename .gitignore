@@ -20,3 +20,5 @@ ignition/deployments/chain-31337
 .idea
 
 .DS_Store
+
+secret.json

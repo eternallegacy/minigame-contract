@@ -30,6 +30,10 @@ contract Nft1155Contract is ERC1155Upgradeable, OwnableUpgradeable, INft1155Cont
     }
 
 
+    function setURI(string memory newuri) public onlyOwner {
+        _setURI(newuri);
+    }
+
     function setMinter(address _minter) public onlyOwner {
         address oldMinter = minter;
         minter = _minter;
